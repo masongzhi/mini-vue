@@ -1,0 +1,29 @@
+{
+  "name": "mini-vue",
+  "version": "0.0.1",
+  "description": "a mini by leaning vue-design",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masongzhi/mini-vue.git"
+  },
+  "keywords": [
+    "mini-vue",
+    "vue"
+  ],
+  "author": "masongzhi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/masongzhi/mini-vue/issues"
+  },
+  "homepage": "https://github.com/masongzhi/mini-vue#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.24.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
+}
