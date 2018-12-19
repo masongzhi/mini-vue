@@ -14,3 +14,6 @@ vm.$watch("e.a", function(n, o) {
   console.log("e.a===>>>>", n);
 });
 vm.$set(vm, "e.a", 6);
+
+const value = vm.getValue()
+console.log('value===>>>>', value);

@@ -1,30 +1,38 @@
-import { handleData, handleWatchers, sub, handleTemplate } from "./observe";
+import {
+  handleData,
+  handleWatchers,
+  handleTemplate,
+  handleMethods,
+  responseData,
+  sub
+} from "./observe";
 import { get, set, getByIndex, getKeyByIndex } from "./utils";
 
 export default class Vue {
   constructor(config) {
-    this._event = []
+    this._event = [];
     this.$options = config;
     // beforeCreate
-    this.$options.beforeCreate.call(this)
-    this.$data = handleData(this, this.$options.data());
+    this.$options.beforeCreate && this.$options.beforeCreate.call(this);
+    handleData(this, this.$options.data());
     handleWatchers(this, this.$options.watch);
+    handleMethods(this, this.$options.methods);
     // created
-    this.$options.created.call(this)
+    this.$options.created && this.$options.created.call(this);
     // beforeMount
-    this.$options.beforeMount.call(this)
+    this.$options.beforeMount && this.$options.beforeMount.call(this);
     handleTemplate(this, this.$options.template);
     // mounted
-    this.$options.mounted.call(this)
+    this.$options.mounted && this.$options.mounted.call(this);
   }
 
   $set(object, key, value) {
-    object = object === this ? this.$data : object
+    object = object === this ? this.$data : object;
     // 兼容新的key没办法首次pub
     if (get(object, key) === undefined) {
       set(object, key);
     }
-    handleData(this, getByIndex(object, key, -1), getKeyByIndex(key, -1));
+    responseData(this, getByIndex(object, key, -1), getKeyByIndex(key, -1));
     set(object, key, value);
   }
 
@@ -34,11 +42,11 @@ export default class Vue {
 
   // beforeUpdate
   _handleBeforeUpdate() {
-    this.$options.beforeUpdate.call(this)
+    this.$options.beforeUpdate && this.$options.beforeUpdate.call(this);
   }
 
   // updated
   _handleUpdated() {
-    this.$options.updated.call(this)
+    this.$options.updated && this.$options.updated.call(this);
   }
 }

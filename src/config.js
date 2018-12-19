@@ -7,6 +7,7 @@ export default {
   `,
   data() {
     return {
+      value: 'i`m value',
       a: 2,
       b: {
         a: 34,
@@ -28,6 +29,11 @@ export default {
       console.log("old a===>>>>", o);
     }
   },
+  methods: {
+    getValue() {
+      return this.$data.value
+    }
+  },
   beforeCreate() {
     console.log('beforeCreate===>>>>');
   },
@@ -39,5 +45,11 @@ export default {
   },
   mounted() {
     console.log('mounted===>>>>');
+  },
+  beforeUpdate() {
+    console.log('beforeUpdated===>>>>');
+  },
+  updated() {
+    console.log('updated===>>>>');
   }
 };

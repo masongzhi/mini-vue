@@ -18,6 +18,13 @@ const pub = function(vm, key, n, o) {
 };
 
 export function handleData(vm, data, keyStr) {
+  vm.$data = responseData(vm, data, keyStr)
+  Object.keys(data).forEach(key => {
+    vm[key] = data[key]
+  })
+}
+
+export function responseData(vm, data, keyStr) {
   Object.keys(data).forEach(key => {
     const _keyStr = keyStr ? keyStr + "." + key : key;
     let val = data[key];
@@ -36,7 +43,7 @@ export function handleData(vm, data, keyStr) {
     });
 
     if (typeof data[key] === "object" || typeof data[key] === "function") {
-      handleData(vm, data[key], _keyStr);
+      responseData(vm, data[key], _keyStr);
     }
   });
   return data;
@@ -71,4 +78,13 @@ export function handleTemplate(vm, template) {
   });
 
   render(null, result.newTemplate);
+}
+
+export function handleMethods(vm, methods) {
+  Object.keys(methods).forEach(key => {
+    if (vm.$data[key]) {
+      throw new Error('has already declared' + key + ' in vm.$data')
+    }
+    vm[key] = methods[key].bind(vm)
+  })
 }
