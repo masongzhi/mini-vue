@@ -1,4 +1,10 @@
 export default {
+  template: `
+    <div>
+      <div>{{a}}</div>
+      <div>{{b.a}}</div>
+    </div>
+  `,
   data() {
     return {
       a: 2,
@@ -21,5 +27,17 @@ export default {
       console.log("new a===>>>>", n);
       console.log("old a===>>>>", o);
     }
+  },
+  beforeCreate() {
+    console.log('beforeCreate===>>>>');
+  },
+  created() {
+    console.log('created===>>>>');
+  },
+  beforeMount() {
+    console.log('beforeMount===>>>>');
+  },
+  mounted() {
+    console.log('mounted===>>>>');
   }
 };

@@ -23,7 +23,5 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1"
   },
-  "dependencies": {
-    "lodash": "^4.17.11"
-  }
+  "dependencies": {}
 }
