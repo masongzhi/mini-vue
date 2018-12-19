@@ -5,7 +5,14 @@ export default {
       a: 34,
       b: "dfdf"
     },
-    c: [1, 3, 4]
+    c: [1, 3, 4],
+    d: {
+      a: {
+        b: {
+          c: 1
+        }
+      }
+    }
   },
   watch: {
     a: function (n, o) {

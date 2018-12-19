@@ -1,5 +1,5 @@
 import { handleData, handleWatchers, sub } from "./observe";
-import set from 'lodash/set'
+import { set, getByIndex, getKeyByIndex } from "./utils";
 
 export default class Vue {
   constructor(config) {
@@ -10,13 +10,17 @@ export default class Vue {
 
   $set(object, key, value) {
     if (object === this) {
-      set(this.$data, key, handleData(value))
+      set(this.$data, key, value);
+      handleData(getByIndex(this.$data, key, -1), getKeyByIndex(key, -1));
     } else {
-      set(object, key, handleData(value))
+      set(object, key, value);
+      handleData(getByIndex(object, key, -1), getKeyByIndex(key, -1));
     }
   }
 
   $watch(key, func) {
+    set(this.$data, key);
+    handleData(getByIndex(this.$data, key, -1), getKeyByIndex(key, -1));
     sub(key, func);
   }
 }
