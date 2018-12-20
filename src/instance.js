@@ -7,7 +7,14 @@ import {
   responseData,
   sub
 } from "./observe";
-import { get, set, getByIndex, getKeyByIndex } from "./utils";
+import {
+  get,
+  set,
+  getByIndex,
+  getKeyByIndex,
+  proxy,
+  isUndefined
+} from "./utils";
 
 export default class Vue {
   constructor(config) {
@@ -29,13 +36,28 @@ export default class Vue {
   }
 
   $set(object, key, value) {
-    object = object === this ? this.$data : object;
+    const isVm = object === this;
+    // 需要在赋值前记录是否存在
+    const isNewKey = isVm && isUndefined(get(this, key));
+    object = isVm ? this.$data : object;
+
+    if (isVm
+      && getKeyByIndex(key, 1) in object
+      && typeof object[getKeyByIndex(key, 1)] === 'function'
+    ) {
+      throw new Error("has already declared" + key + " in vm.methods");
+    }
+
     // 兼容新的key没办法首次pub
-    if (get(object, key) === undefined) {
+    if (isUndefined(get(object, key))) {
       set(object, key);
     }
     responseData(this, getByIndex(object, key, -1), getKeyByIndex(key, -1));
     set(object, key, value);
+    // 当新的key加进来$data时，需要创建新的proxy
+    if (isNewKey) {
+      proxy(object, this, getKeyByIndex(key, 1));
+    }
   }
 
   $watch(key, func) {

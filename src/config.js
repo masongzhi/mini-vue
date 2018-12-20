@@ -27,18 +27,16 @@ export default {
   },
   computed: {
     combineValueAndA() {
-      console.log("this.value===>>>>", this.$data.value);
-      console.log("this.a===>>>>", this.$data.a);
-      return this.$data.value + this.$data.a;
+      return this.value + this.a;
     },
     fullName: {
       get() {
-        return this.$data.firstName + " " + this.$data.lastName;
+        return this.firstName + " " + this.lastName;
       },
       set(val) {
         const names = val.split(" ");
-        this.$data.firstName = names[0];
-        this.$data.lastName = names[names.length - 1];
+        this.firstName = names[0];
+        this.lastName = names[names.length - 1];
       }
     }
   },
@@ -50,7 +48,7 @@ export default {
   },
   methods: {
     getValue() {
-      return this.$data.value;
+      return this.value;
     }
   },
   beforeCreate() {

@@ -1,4 +1,4 @@
-import { get } from "./utils";
+import { get, proxy } from "./utils";
 import render from "./render";
 // 订阅
 export const sub = function(vm, key, handler) {
@@ -19,6 +19,7 @@ const pub = function(vm, key, n, o) {
 
 export function handleData(vm, data, keyStr) {
   vm.$data = responseData(vm, data, keyStr);
+  proxy(vm.$data, vm)
 }
 
 export function responseData(vm, data, keyStr) {
@@ -26,6 +27,7 @@ export function responseData(vm, data, keyStr) {
     const _keyStr = keyStr ? keyStr + "." + key : key;
     let val = data[key];
     Object.defineProperty(data, key, {
+      enumerable: true,
       get() {
         return val;
       },
@@ -94,22 +96,24 @@ export function handleComputed(vm, computeds) {
     }
     // 处理为统一格式
     const computedType = typeof computeds[key];
+    let computed = computeds[key];
+
     if (computedType === "function") {
-      vm[key] = {
-        get: computeds[key].bind(vm)
+      computed = {
+        get: computed.bind(vm)
       };
     } else if (computedType === "object") {
-      vm[key] = {
-        get: computeds[key].get.bind(vm),
-        set: computeds[key].set.bind(vm)
+      computed = {
+        get: computed.get.bind(vm),
+        set: computed.set.bind(vm)
       };
     } else {
       throw new Error(
         "type of computed was wrong, should be a function or a object"
       );
     }
-    let computed = vm[key];
     Object.defineProperty(vm.$computed, key, {
+      enumerable: true,
       get() {
         return computed.get();
       },
@@ -119,4 +123,5 @@ export function handleComputed(vm, computeds) {
       }
     });
   });
+  proxy(vm.$computed, vm)
 }
