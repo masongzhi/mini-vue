@@ -87,7 +87,7 @@ export function handleMethods(vm, methods) {
 }
 
 export function handleComputed(vm, computeds) {
-  vm.$computed = {}
+  vm.$computed = {};
   Object.keys(computeds).forEach(key => {
     if (key in vm) {
       throw new Error("has already declared" + key + " in vm");
