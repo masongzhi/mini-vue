@@ -73,3 +73,10 @@ export function getKeyByIndex(key, i) {
   const getLen = i > 0 ? i + 1 : length + i;
   return pathArr.slice(0, getLen).join(".");
 }
+
+/**
+ * 对象代理
+ * @param target 原对象
+ * @param proxyTarget 需要代理的对象
+ */
+export function proxy(target, proxyTarget) {}

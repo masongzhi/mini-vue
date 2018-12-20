@@ -15,5 +15,10 @@ vm.$watch("e.a", function(n, o) {
 });
 vm.$set(vm, "e.a", 6);
 
-const value = vm.getValue()
-console.log('value===>>>>', value);
+const value = vm.getValue();
+console.log("value===>>>>", value);
+
+console.log("computed combineValueAndA===>>>>", vm.$computed.combineValueAndA);
+console.log("computed fullName==before=>>>>", vm.$computed.fullName);
+vm.$computed.fullName = "Bar Foo";
+console.log("computed fullName==after=>>>>", vm.$computed.fullName);

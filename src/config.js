@@ -7,7 +7,7 @@ export default {
   `,
   data() {
     return {
-      value: 'i`m value',
+      value: "i`m value",
       a: 2,
       b: {
         a: 34,
@@ -20,8 +20,27 @@ export default {
             c: 1
           }
         }
-      }
+      },
+      firstName: "Foo",
+      lastName: "Bar"
     };
+  },
+  computed: {
+    combineValueAndA() {
+      console.log("this.value===>>>>", this.$data.value);
+      console.log("this.a===>>>>", this.$data.a);
+      return this.$data.value + this.$data.a;
+    },
+    fullName: {
+      get() {
+        return this.$data.firstName + " " + this.$data.lastName;
+      },
+      set(val) {
+        const names = val.split(" ");
+        this.$data.firstName = names[0];
+        this.$data.lastName = names[names.length - 1];
+      }
+    }
   },
   watch: {
     a: function(n, o) {
@@ -31,25 +50,25 @@ export default {
   },
   methods: {
     getValue() {
-      return this.$data.value
+      return this.$data.value;
     }
   },
   beforeCreate() {
-    console.log('beforeCreate===>>>>');
+    console.log("beforeCreate===>>>>");
   },
   created() {
-    console.log('created===>>>>');
+    console.log("created===>>>>");
   },
   beforeMount() {
-    console.log('beforeMount===>>>>');
+    console.log("beforeMount===>>>>");
   },
   mounted() {
-    console.log('mounted===>>>>');
+    console.log("mounted===>>>>");
   },
   beforeUpdate() {
-    console.log('beforeUpdated===>>>>');
+    console.log("beforeUpdated===>>>>");
   },
   updated() {
-    console.log('updated===>>>>');
+    console.log("updated===>>>>");
   }
 };

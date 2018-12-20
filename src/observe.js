@@ -18,10 +18,7 @@ const pub = function(vm, key, n, o) {
 };
 
 export function handleData(vm, data, keyStr) {
-  vm.$data = responseData(vm, data, keyStr)
-  Object.keys(data).forEach(key => {
-    vm[key] = data[key]
-  })
+  vm.$data = responseData(vm, data, keyStr);
 }
 
 export function responseData(vm, data, keyStr) {
@@ -34,11 +31,11 @@ export function responseData(vm, data, keyStr) {
       },
       set(newVal) {
         if (newVal === val) return;
-        vm._handleBeforeUpdate()
+        vm._handleBeforeUpdate();
         const oldVal = val;
         val = newVal;
         pub(vm, _keyStr, newVal, oldVal);
-        vm._handleUpdated()
+        vm._handleUpdated();
       }
     });
 
@@ -65,7 +62,7 @@ function transTemplate(vm, template) {
   return {
     newTemplate,
     keys
-  }
+  };
 }
 export function handleTemplate(vm, template) {
   const result = transTemplate(vm, template);
@@ -82,9 +79,44 @@ export function handleTemplate(vm, template) {
 
 export function handleMethods(vm, methods) {
   Object.keys(methods).forEach(key => {
-    if (vm.$data[key]) {
-      throw new Error('has already declared' + key + ' in vm.$data')
+    if (key in vm) {
+      throw new Error("has already declared" + key + " in vm");
     }
-    vm[key] = methods[key].bind(vm)
-  })
+    vm[key] = methods[key].bind(vm);
+  });
+}
+
+export function handleComputed(vm, computeds) {
+  vm.$computed = {}
+  Object.keys(computeds).forEach(key => {
+    if (key in vm) {
+      throw new Error("has already declared" + key + " in vm");
+    }
+    // 处理为统一格式
+    const computedType = typeof computeds[key];
+    if (computedType === "function") {
+      vm[key] = {
+        get: computeds[key].bind(vm)
+      };
+    } else if (computedType === "object") {
+      vm[key] = {
+        get: computeds[key].get.bind(vm),
+        set: computeds[key].set.bind(vm)
+      };
+    } else {
+      throw new Error(
+        "type of computed was wrong, should be a function or a object"
+      );
+    }
+    let computed = vm[key];
+    Object.defineProperty(vm.$computed, key, {
+      get() {
+        return computed.get();
+      },
+      set(newVal) {
+        if (newVal === computed.get()) return;
+        computed.set(newVal);
+      }
+    });
+  });
 }

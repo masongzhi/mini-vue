@@ -1,8 +1,9 @@
 import {
   handleData,
+  handleComputed,
   handleWatchers,
-  handleTemplate,
   handleMethods,
+  handleTemplate,
   responseData,
   sub
 } from "./observe";
@@ -15,6 +16,7 @@ export default class Vue {
     // beforeCreate
     this.$options.beforeCreate && this.$options.beforeCreate.call(this);
     handleData(this, this.$options.data());
+    handleComputed(this, this.$options.computed);
     handleWatchers(this, this.$options.watch);
     handleMethods(this, this.$options.methods);
     // created
